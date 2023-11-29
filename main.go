@@ -7,9 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/sync/errgroup"
 
-	"messenger/global"
-	"messenger/middleware"
-	"messenger/send"
+	"github.com/veops/messenger/global"
+	"github.com/veops/messenger/middleware"
+	"github.com/veops/messenger/send"
 )
 
 func main() {
