@@ -31,7 +31,7 @@ func (w *wechatBot) send(msg *message) error {
 			return fmt.Errorf("sender type %s does not support simple type %s", w.conf["type"], msg.MsgType)
 		}
 	}
-	
+
 	if len(msg.Ats) > 0 {
 		switch msg.MsgType {
 		case simpleText:
