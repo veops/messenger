@@ -1,4 +1,12 @@
-# Messenger
+# <center>Messenger</center>
+
+<div align=center>
+
+![License](https://img.shields.io/github/license/veops/messenger)
+![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.18-%23007d9c)
+![Go report](https://goreportcard.com/badge/github.com/veops/messenger)
+</div>
+
 
 messenger是一个简单轻量的消息发送服务，支持邮件、微信、飞书、钉钉，同时支持配置动态修改，使用简单灵活
 
