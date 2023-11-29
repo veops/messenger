@@ -1,10 +1,9 @@
-module messenger
+module github.com/veops/messenger
 
 go 1.20
 
 require (
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/jinzhu/copier v0.4.0
 	github.com/knadh/koanf v1.5.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
@@ -47,5 +46,4 @@ require (
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	moul.io/http2curl v1.0.0
 )

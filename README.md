@@ -1,14 +1,12 @@
-# <center>Messenger</center>
-
-<div align=center>
-
-![License](https://img.shields.io/github/license/veops/messenger)
-![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.18-%23007d9c)
-![Go report](https://goreportcard.com/badge/github.com/veops/messenger)
-</div>
-
-
+<h3 align="center">Messenger</h3>
+<p align="center">
+  <a href="https://github.com/veops/messenger/blob/main/LICENSE"><img src="https://img.shields.io/github/license/veops/messenger" alt="Apache License 2.0"></a>
+  <a href=""><img src="https://img.shields.io/badge/Go-%3E%3D%201.18-%23007d9c" alt="go>=1.18"></a>
+  <a href="https://goreportcard.com/report/github.com/veops/messenger"><img src="https://goreportcard.com/badge/github.com/veops/messenger" alt="API"></a>
+</p>
 messenger是一个简单轻量的消息发送服务，支持邮件、微信、飞书、钉钉，同时支持配置动态修改，使用简单灵活
+
+---
 
 ## 安装
 
@@ -38,18 +36,18 @@ docker run -d --name messenger -p 8888:8888 -v $(pwd)/conf:/messenger/conf --res
 
 参数说明：
 
-| 参数   | 是否必须 | 类型   | 说明                                                   |
-| :----- | :------- | :----- | :----------------------------------------------------- |
-| sender | 是       | string | sender名称：发送消息具体sender的名称，对应conf中的name |
-| msgtype | 是       | string | 消息内容类型：每种消息发送方式支持多种消息内容类型，各发送方式支持的消息内容类型参考如下 <br> email: text/plain text/html <br> wechatBot: [微信机器人](https://developer.work.weixin.qq.com/document/path/99110#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B%E5%8F%8A%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F)  &emsp;&emsp;&emsp;&nbsp; wechatApp：[微信应用](https://developer.work.weixin.qq.com/document/path/90236#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B) <br>  feishuBot：[飞书机器人](https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot#5a997364) &emsp;&emsp;&emsp;&nbsp; feishuApp：[飞书应用](https://open.feishu.cn/document/server-docs/im-v1/message-content-description/create_json#3c92befd) <br> dingdingBot：[钉钉机器人](https://open.dingtalk.com/document/orgapp/custom-robot-access#title-72m-8ag-pqw) &emsp;&emsp; dingdingApp：[钉钉应用](https://open.dingtalk.com/document/orgapp/types-of-messages-sent-by-robots?spm)|
-|content|是|string|消息内容：邮件可直接填写内容字符串，其他消息内容本身具有结构，传入其JSON序列化之后的字符串，如微信应用的文本消息填写`{"content":"my content"}`序列化后字符串|
-|title|否|string|消息标题：仅用于 email 类型|
-|tos|否|[]string|接收人列表：发送邮件、应用消息时需要填写|
-|ccs|否|[]string|抄送人列表：仅用于 email 类型|
-|extra|否|string|额外参数：通常情况下您只需要关注消息内容类型和其内容发送人，但是当您需要传递一些额外参数时，比如微信应用开启重复检查和检查时间间隔，可以将extra设置为`{"enable_duplicate_check":1, "duplicate_check_interval": 1800}`序列化后字符串|
-|sync|否|bool|同步发送：默认情况下，发送请求接受成功即返回200，消息会异步发送，若sync为true则会同步等待消息发送结果并返回|
-|simple|否|bool|简单内容：默认情况下，消息内容是json字符串（参考content参数），对于简单的消息类型text和markdown可设置simple=true，此时content仅填写内容字符串本身即可，如`my content`。<br>支持的消息类型（msgtype）<br>text: wechatBot wechatApp feishuBot feishuApp dingdingBot dingdingApp<br>markdown: wechatBot wechatApp dingdingBot dingdingApp
-|ats|否|[]string|@列表： 使用@all代表@所有人; 支持wechatBot, feishuBot, dingdingBot |
+| 参数    | 是否必须 | 类型     | 说明                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| :------ | :------- | :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| sender  | 是       | string   | sender名称：发送消息具体sender的名称，对应conf中的name                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| msgtype | 是       | string   | 消息内容类型：每种消息发送方式支持多种消息内容类型，各发送方式支持的消息内容类型参考如下 <br> email: text/plain text/html <br> wechatBot: [微信机器人](https://developer.work.weixin.qq.com/document/path/99110#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B%E5%8F%8A%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F)  &emsp;&emsp;&emsp;&nbsp; wechatApp：[微信应用](https://developer.work.weixin.qq.com/document/path/90236#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B) <br>  feishuBot：[飞书机器人](https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot#5a997364) &emsp;&emsp;&emsp;&nbsp; feishuApp：[飞书应用](https://open.feishu.cn/document/server-docs/im-v1/message-content-description/create_json#3c92befd) <br> dingdingBot：[钉钉机器人](https://open.dingtalk.com/document/orgapp/custom-robot-access#title-72m-8ag-pqw) &emsp;&emsp; dingdingApp：[钉钉应用](https://open.dingtalk.com/document/orgapp/types-of-messages-sent-by-robots?spm) |
+| content | 是       | string   | 消息内容：邮件可直接填写内容字符串，其他消息内容本身具有结构，传入其JSON序列化之后的字符串，如微信应用的文本消息填写`{"content":"my content"}`序列化后字符串                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| title   | 否       | string   | 消息标题：仅用于 email 类型                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| tos     | 否       | []string | 接收人列表：发送邮件、应用消息时需要填写                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ccs     | 否       | []string | 抄送人列表：仅用于 email 类型                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| extra   | 否       | string   | 额外参数：通常情况下您只需要关注消息内容类型和其内容发送人，但是当您需要传递一些额外参数时，比如微信应用开启重复检查和检查时间间隔，可以将extra设置为`{"enable_duplicate_check":1, "duplicate_check_interval": 1800}`序列化后字符串                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| sync    | 否       | bool     | 同步发送：默认情况下，发送请求接受成功即返回200，消息会异步发送，若sync为true则会同步等待消息发送结果并返回                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| simple  | 否       | bool     | 简单内容：默认情况下，消息内容是json字符串（参考content参数），对于简单的消息类型text和markdown可设置simple=true，此时content仅填写内容字符串本身即可，如`my content`。<br>支持的消息类型（msgtype）<br>text: wechatBot wechatApp feishuBot feishuApp dingdingBot dingdingApp<br>markdown: wechatBot wechatApp dingdingBot dingdingApp                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ats     | 否       | []string | @列表： 使用@all代表@所有人; 支持wechatBot, feishuBot, dingdingBot                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 返回结果：
 ```json
@@ -131,9 +129,9 @@ func main() {
 
 参数说明：
 
-| 参数（请求体）   | 是否必须 | 类型   | 说明                                                   |
-| :----- | :------- | :----- | :----------------------------------------------------- |
-|body|是|json|请求body为您的sender配置，如`{"wechatBot": [{"name": "yourSenderName", "url": "https://xxx"}]`<br>POST：同类型配置会被全部覆盖<br>PUT：同类型同名称的配置会被更新，新配置将被添加<br>DELETE：同类型同名称配置将被删除|
+| 参数（请求体） | 是否必须 | 类型 | 说明                                                                                                                                                                                                                  |
+| :------------- | :------- | :--- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| body           | 是       | json | 请求body为您的sender配置，如`{"wechatBot": [{"name": "yourSenderName", "url": "https://xxx"}]`<br>POST：同类型配置会被全部覆盖<br>PUT：同类型同名称的配置会被更新，新配置将被添加<br>DELETE：同类型同名称配置将被删除 |
 
 返回结果：
 ```json
@@ -156,10 +154,10 @@ func main() {
 
 参数说明：
 
-| 参数   | 是否必须 | 类型   | 说明          |
-| :----- | :------- | :----- | :------------ |
-|sender|是|string|查询用户id时使用的sender名称|
-|phone|是|string|手机号|
+| 参数   | 是否必须 | 类型   | 说明                         |
+| :----- | :------- | :----- | :--------------------------- |
+| sender | 是       | string | 查询用户id时使用的sender名称 |
+| phone  | 是       | string | 手机号                       |
 
 返回结果：
 ```json
