@@ -50,6 +50,7 @@ type message struct {
 	Sync       bool           `json:"sync"`
 	Simple     bool           `json:"simple"`
 	Ats        []string       `json:"ats"`
+	AtMobiles  []string       `json:"at_mobiles"`
 	ContentMap map[string]any `json:"-"`
 	ExtraMap   map[string]any `json:"-"`
 }
@@ -94,6 +95,7 @@ func PushMessage(ctx *gin.Context) {
 		return
 	}
 	m.Ats = lo.Uniq(m.Ats)
+	m.AtMobiles = lo.Uniq(m.AtMobiles)
 
 	if s, ok := name2sender[m.Sender]; ok && s != nil && s.getConf()["type"] != "email" && !m.Simple {
 		if m.Content != "" {
