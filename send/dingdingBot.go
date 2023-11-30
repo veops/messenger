@@ -45,14 +45,15 @@ func (d *dingdingBot) send(msg *message) error {
 	}
 
 	at := make(map[string]any)
-	if len(msg.Ats) > 0 {
+	if len(msg.Ats) > 0 || len(msg.AtMobiles) > 0 {
 		switch msg.MsgType {
 		case simpleText, simpleMarkdown:
-			at["isAtAll"] = lo.Contains(msg.Ats, "@all")
+			at["isAtAll"] = lo.Contains(msg.Ats, "@all") || lo.Contains(msg.AtMobiles, "@all")
 			at["atUserIds"] = lo.Without(msg.Ats, "@all")
+			at["atMobiles"] = lo.Without(msg.AtMobiles, "@all")
 			msg.ContentMap["text"] = fmt.Sprintf("%v \n %s",
 				msg.ContentMap["text"],
-				strings.Join(lo.Map(msg.Ats, func(s string, _ int) string { return fmt.Sprintf("@%s", s) }), " "))
+				strings.Join(lo.Map(append(msg.Ats, msg.AtMobiles...), func(s string, _ int) string { return fmt.Sprintf("@%s", s) }), " "))
 		}
 	}
 

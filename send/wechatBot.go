@@ -31,7 +31,7 @@ func (w *wechatBot) send(msg *message) error {
 			return fmt.Errorf("sender type %s does not support simple type %s", w.conf["type"], msg.MsgType)
 		}
 	}
-	
+
 	if len(msg.Ats) > 0 {
 		switch msg.MsgType {
 		case simpleText:
@@ -40,6 +40,12 @@ func (w *wechatBot) send(msg *message) error {
 			msg.ContentMap["content"] = fmt.Sprintf("%v \n %s",
 				msg.ContentMap["content"],
 				strings.Join(lo.Map(msg.Ats, func(s string, _ int) string { return fmt.Sprintf("<@%s>", s) }), " "))
+		}
+	}
+	if len(msg.AtMobiles) > 0 {
+		switch msg.MsgType {
+		case simpleText:
+			msg.ContentMap["mentioned_mobile_list"] = msg.AtMobiles
 		}
 	}
 
