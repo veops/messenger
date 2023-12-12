@@ -31,7 +31,7 @@ func Error2Resp() gin.HandlerFunc {
 			json.Unmarshal(wb.body.Bytes(), &obj)
 			obj["msg"] = "ok"
 		} else {
-			obj["msg"] = ctx.Errors.String()
+			obj["msg"] = ctx.Errors.Last().Error()
 		}
 		bs, _ := json.Marshal(obj)
 		wb.ResponseWriter.Write(bs)

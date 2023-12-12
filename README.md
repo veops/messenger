@@ -28,6 +28,8 @@ docker run -d --name messenger -p 8888:8888 -v $(pwd)/conf:/messenger/conf --res
 
 ## API
 
+> You can also visit http://127.0.0.1:8888/swagger/index.html to check api.
+
 ### 发送消息
 
 请求方式：POST
@@ -132,7 +134,7 @@ func main() {
 
 | 参数（请求体） | 是否必须 | 类型 | 说明                                                                                                                                                                                                                  |
 | :------------- | :------- | :--- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| body           | 是       | json | 请求body为您的sender配置，如`{"wechatBot": [{"name": "yourSenderName", "url": "https://xxx"}]`<br>POST：同类型配置会被全部覆盖<br>PUT：同类型同名称的配置会被更新，新配置将被添加<br>DELETE：同类型同名称配置将被删除 |
+| body           | 是       | json | 请求body为您的sender配置，如`{"wechatBot": [{"name": "yourSenderName", "url": "https://xxx"}]}`<br>POST：同类型配置会被全部覆盖<br>PUT：同类型同名称的配置会被更新，新配置将被添加<br>DELETE：同类型同名称配置将被删除 |
 
 返回结果：
 ```json
