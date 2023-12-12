@@ -5,13 +5,18 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"golang.org/x/sync/errgroup"
 
+	"github.com/veops/messenger/docs"
 	"github.com/veops/messenger/global"
 	"github.com/veops/messenger/middleware"
 	"github.com/veops/messenger/send"
 )
 
+//	@externalDocs.description	Messenger README
+//	@externalDocs.url			https://github.com/veops/messenger?tab=readme-ov-file#messenger
 func main() {
 	authConf, err := global.GetAuthConf()
 	if err != nil {
@@ -34,6 +39,10 @@ func main() {
 		v1.DELETE("/senders", global.PushRemoteConf)
 
 	}
+	docs.SwaggerInfo.Title = "Messenger api"
+	docs.SwaggerInfo.Version = ""
+	docs.SwaggerInfo.BasePath = "/"
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	eg := &errgroup.Group{}
 	eg.Go(send.Start)

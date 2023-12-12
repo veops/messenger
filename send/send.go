@@ -40,24 +40,24 @@ type senderManager interface {
 }
 
 type message struct {
-	Sender     string         `json:"sender"`
-	MsgType    string         `json:"msgtype"`
-	Content    string         `json:"content"`
-	Title      string         `json:"title"`
-	Tos        []string       `json:"tos"`
-	Ccs        []string       `json:"ccs"`
-	Extra      string         `json:"extra"`
-	Sync       bool           `json:"sync"`
-	Simple     bool           `json:"simple"`
-	Ats        []string       `json:"ats"`
-	AtMobiles  []string       `json:"at_mobiles"`
+	Sender     string         `json:"sender" validate:"required" example:"myWechatBot"`
+	MsgType    string         `json:"msgtype" validate:"required" example:"text"`
+	Content    string         `json:"content" validate:"required" example:"this is a text content"`
+	Title      string         `json:"title" validate:"optional" example:""`
+	Tos        []string       `json:"tos" validate:"optional" example:""`
+	Ccs        []string       `json:"ccs" validate:"optional" example:""`
+	Extra      string         `json:"extra" validate:"optional" example:"{\"enable_duplicate_check\": 1,\"duplicate_check_interval\": 1800}"`
+	Sync       bool           `json:"sync" validate:"optional" example:"true"`
+	Simple     bool           `json:"simple" validate:"optional" example:"true"`
+	Ats        []string       `json:"ats" validate:"optional" example:"xxx"`
+	AtMobiles  []string       `json:"at_mobiles" validate:"optional" example:"133123456789"`
 	ContentMap map[string]any `json:"-"`
 	ExtraMap   map[string]any `json:"-"`
 }
 
 type getUIDByPhoneReq struct {
-	Sender string `json:"sender"`
-	Phone  string `json:"phone"`
+	Sender string `json:"sender" validate:"required" example:"myWechatBot"`
+	Phone  string `json:"phone" validate:"required" example:"133123456789"`
 }
 
 func init() {
@@ -88,6 +88,16 @@ func Start() error {
 	}
 }
 
+// PushMessage
+//
+//	@Tags			send
+//	@Description	send a new message
+//	@Description	https://github.com/veops/messenger?tab=readme-ov-file#发送消息
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		message				true	" "
+//	@Success		200		{object}	map[string]string	"a map with msg info, eg. {msg:ok}"
+//	@Router			/v1/message [POST]
 func PushMessage(ctx *gin.Context) {
 	m := &message{}
 	if err := ctx.ShouldBindBodyWith(&m, binding.JSON); err != nil {
@@ -123,6 +133,16 @@ func PushMessage(ctx *gin.Context) {
 	msgCh <- m
 }
 
+// GetUIDByPhone
+//
+//	@Tags			send
+//	@Description	get user's uid by he or she's phone number
+//	@Description	https://github.com/veops/messenger?tab=readme-ov-file#查询用户ID
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		getUIDByPhoneReq	true	" "
+//	@Success		200		{object}	map[string]string	"a map with phone as key and uid as value"
+//	@Router			/v1/uid/getbyphone [POST]
 func GetUIDByPhone(ctx *gin.Context) {
 	var err error
 	defer func() {

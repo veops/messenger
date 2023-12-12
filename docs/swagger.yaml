@@ -1,0 +1,216 @@
+definitions:
+  send.getUIDByPhoneReq:
+    properties:
+      phone:
+        example: "133123456789"
+        type: string
+      sender:
+        example: myWechatBot
+        type: string
+    required:
+    - phone
+    - sender
+    type: object
+  send.message:
+    properties:
+      at_mobiles:
+        example:
+        - "133123456789"
+        items:
+          type: string
+        type: array
+      ats:
+        example:
+        - xxx
+        items:
+          type: string
+        type: array
+      ccs:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+      content:
+        example: this is a text content
+        type: string
+      extra:
+        example: '{"enable_duplicate_check": 1,"duplicate_check_interval": 1800}'
+        type: string
+      msgtype:
+        example: text
+        type: string
+      sender:
+        example: myWechatBot
+        type: string
+      simple:
+        example: true
+        type: boolean
+      sync:
+        example: true
+        type: boolean
+      title:
+        example: ""
+        type: string
+      tos:
+        example:
+        - ""
+        items:
+          type: string
+        type: array
+    required:
+    - content
+    - msgtype
+    - sender
+    type: object
+externalDocs:
+  description: Messenger README
+  url: https://github.com/veops/messenger?tab=readme-ov-file#messenger
+info:
+  contact: {}
+paths:
+  /v1/message:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        send a new message
+        https://github.com/veops/messenger?tab=readme-ov-file#发送消息
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/send.message'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: a map with msg info, eg. {msg:ok}
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      tags:
+      - send
+  /v1/senders:
+    delete:
+      consumes:
+      - application/json
+      description: |-
+        push a conf to overwrite(POST), update(PUT) or delete(DELETE) existing conf of senders
+        https://github.com/veops/messenger?tab=readme-ov-file#更新配置
+      parameters:
+      - description: 'senders config, eg. {wechatBot: [{name: yourSenderName, url:
+          https://xxx}]}'
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties:
+            items:
+              additionalProperties:
+                type: string
+              type: object
+            type: array
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: a map with msg info, eg. {msg:ok}
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      tags:
+      - conf
+    post:
+      consumes:
+      - application/json
+      description: |-
+        push a conf to overwrite(POST), update(PUT) or delete(DELETE) existing conf of senders
+        https://github.com/veops/messenger?tab=readme-ov-file#更新配置
+      parameters:
+      - description: 'senders config, eg. {wechatBot: [{name: yourSenderName, url:
+          https://xxx}]}'
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties:
+            items:
+              additionalProperties:
+                type: string
+              type: object
+            type: array
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: a map with msg info, eg. {msg:ok}
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      tags:
+      - conf
+    put:
+      consumes:
+      - application/json
+      description: |-
+        push a conf to overwrite(POST), update(PUT) or delete(DELETE) existing conf of senders
+        https://github.com/veops/messenger?tab=readme-ov-file#更新配置
+      parameters:
+      - description: 'senders config, eg. {wechatBot: [{name: yourSenderName, url:
+          https://xxx}]}'
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties:
+            items:
+              additionalProperties:
+                type: string
+              type: object
+            type: array
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: a map with msg info, eg. {msg:ok}
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      tags:
+      - conf
+  /v1/uid/getbyphone:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        get user's uid by he or she's phone number
+        https://github.com/veops/messenger?tab=readme-ov-file#查询用户ID
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/send.getUIDByPhoneReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: a map with phone as key and uid as value
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      tags:
+      - send
+swagger: "2.0"

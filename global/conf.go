@@ -93,6 +93,18 @@ func GetSenders() (senders []map[string]string, err error) {
 	return
 }
 
+// PushRemoteConf
+//
+//	@Tags			conf
+//	@Description	push a conf to overwrite(POST), update(PUT) or delete(DELETE) existing conf of senders
+//	@Description	https://github.com/veops/messenger?tab=readme-ov-file#更新配置
+//	@Accept			json
+//	@Param			body body	map[string][]map[string]string	true "senders config, eg. {wechatBot: [{name: yourSenderName, url: https://xxx}]}"
+//	@Produce		json
+//	@Success		200	{object}	map[string]string	"a map with msg info, eg. {msg:ok}"
+//	@Router			/v1/senders [POST]
+//	@Router			/v1/senders [PUT]
+//	@Router			/v1/senders [DELETE]
 func PushRemoteConf(ctx *gin.Context) {
 	update := make(map[string][]map[string]string)
 	if err := ctx.ShouldBindBodyWith(&update, binding.JSON); err != nil {
