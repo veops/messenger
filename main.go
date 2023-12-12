@@ -15,6 +15,8 @@ import (
 	"github.com/veops/messenger/send"
 )
 
+// main
+//
 //	@externalDocs.description	Messenger README
 //	@externalDocs.url			https://github.com/veops/messenger?tab=readme-ov-file#messenger
 func main() {
