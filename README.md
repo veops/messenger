@@ -28,7 +28,7 @@ docker run -d --name messenger -p 8888:8888 -v $(pwd)/conf:/messenger/conf --res
 
 ## API
 
-> You can also visit http://127.0.0.1:8888/swagger/index.html to check api.
+> 您也可以通过访问 http://127.0.0.1:8888/swagger/index.html 查看swagger api文档 
 
 ### 发送消息
 
