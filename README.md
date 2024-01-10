@@ -232,6 +232,7 @@ yaml配置文件定义了
    - feishuApp
    - dingdingBot
    - dingdingApp
+   - aliSms
 
 ```yaml
 app:
