@@ -53,6 +53,7 @@ require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gin-gonic/gin v1.9.1
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/moul/http2curl v1.0.0
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
 	github.com/samber/lo v1.38.1
 	github.com/spf13/cast v1.5.1
@@ -60,4 +61,5 @@ require (
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	moul.io/http2curl v1.0.0
 )

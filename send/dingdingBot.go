@@ -22,7 +22,7 @@ type dingdingBot struct {
 	conf map[string]string
 }
 
-// send dingtal bot message
+// send dingtalk bot message
 //
 //	https://open.dingtalk.com/document/orgapp/custom-bot-creation-and-installation
 func (d *dingdingBot) send(msg *message) error {

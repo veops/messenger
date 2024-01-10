@@ -44,3 +44,9 @@ senders:
     #   appKey: xxxx
     #   appSecret: xxxx
     #   robotCode: xxxx
+  aliSms:
+    # - name: yourSenderName8
+    #   accessKey: xxxx
+    #   accessSecret: xxxx
+    #   templateCode: SMS_123456789
+    #   signName: xxxx

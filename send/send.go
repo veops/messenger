@@ -26,7 +26,7 @@ var (
 	msgCh       = make(chan *message, 10000)
 	confCh      = make(chan struct{}, 1)
 	name2sender = make(map[string]sender)
-	rc          = resty.New()
+	rc          = resty.NewWithClient(&http.Client{})
 )
 
 type sender interface {
