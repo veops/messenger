@@ -54,7 +54,7 @@ func (a *aliSms) send(msg *message) error {
 		}).
 		SetFormData(body)
 	ks := lo.Keys(body)
-	for k, _ := range req.QueryParam {
+	for k := range req.QueryParam {
 		ks = append(ks, k)
 	}
 	sort.Strings(ks)
