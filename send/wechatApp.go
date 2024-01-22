@@ -49,7 +49,7 @@ func (w *wechatApp) send(msg *message) (err error) {
 			return fmt.Errorf("sender type %s does not support simple type %s", w.conf["type"], msg.MsgType)
 		}
 	}
-	resp, err := rc.R().
+	resp, err := rc.SetPreRequestHook(RecordHttpReq(msg)).R().
 		SetQueryParam("access_token", w.token).
 		SetBody(lo.Assign(msg.ExtraMap, map[string]any{
 			"touser":    strings.Join(msg.Tos, "|"),
@@ -58,6 +58,8 @@ func (w *wechatApp) send(msg *message) (err error) {
 			msg.MsgType: msg.ContentMap,
 		})).
 		Post(wechatSendURL)
+
+	RecordResp(msg, err, resp)
 
 	return handleErr("send to wechat app failed", err, resp, func(dt map[string]any) bool { return dt["errcode"] == 0.0 })
 }

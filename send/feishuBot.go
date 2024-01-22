@@ -43,12 +43,14 @@ func (f *feishuBot) send(msg *message) error {
 		}
 	}
 
-	resp, err := rc.R().
+	resp, err := rc.SetPreRequestHook(RecordHttpReq(msg)).R().
 		SetBody(lo.Assign(msg.ExtraMap, map[string]any{
 			"msg_type": msg.MsgType,
 			"content":  msg.ContentMap,
 		})).
 		Post(f.conf["url"])
+
+	RecordResp(msg, err, resp)
 
 	return handleErr("send to feishu bot failed", err, resp, func(dt map[string]any) bool { return dt["code"] == 0.0 })
 }

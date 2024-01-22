@@ -49,12 +49,14 @@ func (w *wechatBot) send(msg *message) error {
 		}
 	}
 
-	resp, err := rc.R().
+	resp, err := rc.SetPreRequestHook(RecordHttpReq(msg)).R().
 		SetBody(lo.Assign(msg.ExtraMap, map[string]any{
 			"msgtype":   msg.MsgType,
 			msg.MsgType: msg.ContentMap,
 		})).
 		Post(w.conf["url"])
+
+	RecordResp(msg, err, resp)
 
 	return handleErr("wechat bot send failed", err, resp, func(dt map[string]any) bool { return dt["errcode"] == 0.0 })
 }

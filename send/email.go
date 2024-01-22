@@ -41,7 +41,13 @@ func (e *email) send(msg *message) (err error) {
 	m.SetHeader("Cc", msg.Ccs...)
 	m.SetBody(msg.MsgType, msg.Content)
 
-	return e.d.DialAndSend(m)
+	RecordEmailReq(msg, m)
+
+	err = e.d.DialAndSend(m)
+
+	RecordResp(msg, err, nil)
+
+	return
 }
 
 func (e *email) getConf() map[string]string {

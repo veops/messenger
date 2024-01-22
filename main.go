@@ -35,11 +35,11 @@ func main() {
 	{
 		v1.POST("/message", send.PushMessage)
 		v1.POST("/uid/getbyphone", send.GetUIDByPhone)
+		v1.GET("/histories", send.QueryHistory)
 
 		v1.POST("/senders", global.PushRemoteConf)
 		v1.PUT("/senders", global.PushRemoteConf)
 		v1.DELETE("/senders", global.PushRemoteConf)
-
 	}
 	docs.SwaggerInfo.Title = "Messenger api"
 	docs.SwaggerInfo.Version = ""

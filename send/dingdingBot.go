@@ -57,7 +57,7 @@ func (d *dingdingBot) send(msg *message) error {
 		}
 	}
 
-	r := rc.R().
+	r := rc.SetPreRequestHook(RecordHttpReq(msg)).R().
 		SetBody(lo.Assign(msg.ExtraMap, map[string]any{
 			"msgtype":   msg.MsgType,
 			msg.MsgType: msg.ContentMap,
@@ -75,6 +75,8 @@ func (d *dingdingBot) send(msg *message) error {
 		})
 	}
 	resp, err := r.Post(d.conf["url"])
+
+	RecordResp(msg, err, resp)
 
 	return handleErr("send to dingding bot failed", err, resp, func(dt map[string]any) bool { return dt["errcode"] == 0.0 })
 }

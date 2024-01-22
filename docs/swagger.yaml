@@ -69,6 +69,48 @@ externalDocs:
 info:
   contact: {}
 paths:
+  /v1/history:
+    get:
+      description: query message history
+      parameters:
+      - description: page_index
+        in: query
+        name: page_index
+        required: true
+        type: integer
+      - description: page_size
+        in: query
+        name: page_size
+        required: true
+        type: integer
+      - description: start time
+        in: query
+        name: start
+        type: integer
+      - description: end time
+        in: query
+        name: end
+        type: integer
+      - description: false failed, true sent successfully
+        in: query
+        name: status
+        type: string
+      - description: sender name
+        in: query
+        name: sender
+        type: string
+      - description: content
+        in: query
+        name: content
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      tags:
+      - send
   /v1/message:
     post:
       consumes:

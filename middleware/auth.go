@@ -54,7 +54,9 @@ func authByToken(conf map[string]string, ctx *gin.Context) bool {
 
 func authBySign(conf map[string]string, ctx *gin.Context) bool {
 	ts := cast.ToInt64(ctx.GetHeader("X-TS"))
-	if ts == 0 || time.Unix(ts, 0).Add(time.Second*60).Before(time.Now()) {
+	now := time.Now()
+	t := time.Unix(ts, 0)
+	if ts == 0 || t.Add(time.Second*60).Before(now) || t.Add(-time.Second*60).After(now) {
 		return false
 	}
 
