@@ -48,7 +48,7 @@ func (f *feishuApp) send(msg *message) (err error) {
 			return fmt.Errorf("sender type %s does not support simple type %s", f.conf["type"], msg.MsgType)
 		}
 	}
-	resp, err := rc.R().
+	resp, err := rc.SetPreRequestHook(RecordHttpReq(msg)).R().
 		SetAuthToken(f.token).
 		SetQueryParam("receive_id_type", "user_id").
 		SetBody(lo.Assign(msg.ExtraMap, map[string]any{
@@ -57,6 +57,8 @@ func (f *feishuApp) send(msg *message) (err error) {
 			"content":  msg.ContentMap,
 		})).
 		Post(feishuSendURL)
+
+	RecordResp(msg, err, resp)
 
 	return handleErr("send to feishu app failed", err, resp, func(dt map[string]any) bool { return dt["code"] == 0.0 })
 }

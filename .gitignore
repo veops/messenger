@@ -2,3 +2,4 @@
 
 conf.yaml
 messenger
+*.db

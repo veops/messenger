@@ -56,7 +56,7 @@ func (d *dingdingApp) send(msg *message) (err error) {
 		}
 	}
 	bs, _ := json.Marshal(msg.ContentMap)
-	resp, err := rc.R().
+	resp, err := rc.SetPreRequestHook(RecordHttpReq(msg)).R().
 		SetHeader("x-acs-dingtalk-access-token", d.token).
 		SetBody(lo.Assign(msg.ExtraMap, map[string]any{
 			"robotCode": d.conf["robotCode"],
@@ -65,6 +65,8 @@ func (d *dingdingApp) send(msg *message) (err error) {
 			"msgParam":  string(bs),
 		})).
 		Post(dingdingSendURL)
+
+	RecordResp(msg, err, resp)
 
 	return handleErr("send to dingding app failed", err, resp, func(dt map[string]any) bool {
 		_, ok := dt["processQueryKey"]

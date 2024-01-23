@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -53,6 +54,10 @@ type message struct {
 	AtMobiles  []string       `json:"at_mobiles" validate:"optional" example:"133123456789"`
 	ContentMap map[string]any `json:"-"`
 	ExtraMap   map[string]any `json:"-"`
+	Err        error          `json:"-"`
+	Req        string         `json:"-"`
+	Resp       string         `json:"-"`
+	ReceivedAt int64          `json:"-"`
 }
 
 type getUIDByPhoneReq struct {
@@ -104,6 +109,7 @@ func PushMessage(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+	m.ReceivedAt = time.Now().Unix()
 	m.Ats = lo.Uniq(m.Ats)
 	m.AtMobiles = lo.Uniq(m.AtMobiles)
 
@@ -224,6 +230,10 @@ func handleMessage(msg *message) (err error) {
 		if err != nil && !msg.Sync {
 			log.Println(err)
 		}
+		if msg.Err != nil && err != nil {
+			msg.Err = err
+		}
+		AddHistory(msg)
 	}()
 
 	s, ok := name2sender[msg.Sender]
@@ -233,7 +243,7 @@ func handleMessage(msg *message) (err error) {
 	}
 
 	if err = s.send(msg); err != nil {
-		err = fmt.Errorf("send failed message=%s\nerr=%v", global.RenderPretty(msg), err)
+		err = fmt.Errorf("send failed %w", err)
 	}
 
 	return

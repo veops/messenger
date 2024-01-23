@@ -39,7 +39,7 @@ func (a *aliSms) send(msg *message) error {
 		"TemplateCode":  a.conf["templateCode"],
 		"TemplateParam": msg.Content,
 	}
-	req := rc.R().
+	req := rc.SetPreRequestHook(RecordHttpReq(msg)).R().
 		SetHeader("Content-Type", "application/x-www-form-urlencoded").
 		SetQueryParams(map[string]string{
 			"Action":           "SendSms",
@@ -79,6 +79,8 @@ func (a *aliSms) send(msg *message) error {
 	req.SetQueryParam("Signature", signature)
 
 	resp, err := req.Post(aliSmsUrl)
+
+	RecordResp(msg, err, resp)
 
 	return handleErr("send to ali sms failed", err, resp, func(dt map[string]any) bool { return dt["Code"] == "OK" })
 }

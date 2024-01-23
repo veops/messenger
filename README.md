@@ -176,6 +176,49 @@ func main() {
 }
 ```
 
+### 查询消息历史
+
+请求方式：GET
+
+请求地址：http://127.0.0.1:8888/v1/histories
+
+参数说明：
+
+| 参数       | 是否必须 | 类型   | 说明               |
+| :--------- | :------- | :----- | :----------------- |
+| page_index | 是       | int    | 分页序号，从1开始  |
+| page_size  | 是       | int    | 分页每页数量       |
+| start      | 否       | int64  | 起始时间unix时间戳 |
+| end        | 否       | int64  | 结束时间unix时间戳 |
+| sender     | 否       | string | 发送方式名称       |
+| content    | 否       | string | 消息内容           |
+
+返回结果：
+```json
+// 正常 httpStatusCode==200
+{
+  "count": 1,
+  "list": [
+    {
+      "CreatedAt": 1705911411,
+      "Err": "",
+      "Id": 1,
+      "Message": "json string of message",
+      "ReceivedAt": 1705911410,
+      "Req": "curl command of request",
+      "Resp": "json string of response body and http code",
+      "Status": true
+    }
+  ],
+  "msg": "ok"
+}
+
+// 异常 httpStatusCode!=200
+{
+  "msg": "xxxx"
+}
+```
+
 ### 鉴权
 
 当配置文件中开启auths鉴权配置后，请求需要加入鉴权信息，目前支持三种鉴权方式.
