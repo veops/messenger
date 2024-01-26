@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-resty/resty/v2"
 	"github.com/moul/http2curl"
+	"github.com/samber/lo"
 	"github.com/spf13/cast"
 	"golang.org/x/sync/errgroup"
 	"gopkg.in/gomail.v2"
@@ -34,14 +36,14 @@ func init() {
 }
 
 type History struct {
-	Id         int    `gorm:"column:id"`
-	Message    string `gorm:"column:message"`
-	Err        string `gorm:"column:err"`
-	Req        string `gorm:"column:req"`
-	Resp       string `gorm:"column:resp"`
-	Status     bool   `gorm:"column:status"`
-	ReceivedAt int64  `gorm:"column:received_at"`
-	CreatedAt  int64  `gorm:"column:created_at"`
+	Id         int    `gorm:"column:id" json:"id"`
+	Message    string `gorm:"column:message" json:"message"`
+	Err        string `gorm:"column:err" json:"err"`
+	Req        string `gorm:"column:req" json:"req"`
+	Resp       string `gorm:"column:resp" json:"resp"`
+	Status     bool   `gorm:"column:status" json:"status"`
+	ReceivedAt int64  `gorm:"column:received_at" json:"received_at"`
+	CreatedAt  int64  `gorm:"column:created_at" json:"created_at"`
 }
 
 func (History) TableName() string {
@@ -83,17 +85,25 @@ func QueryHistory(ctx *gin.Context) {
 	pageIndex, pageSize := cast.ToInt(ctx.Query("page_index")), cast.ToInt(ctx.Query("page_size"))
 	q := db.Model(&History{}).Offset((pageIndex - 1) * pageSize).Limit(pageSize)
 	if v, ok := ctx.GetQuery("start"); ok {
-		q = q.Where("received_at >= ?", v)
+		q = q.Where("created_at >= ?", v)
 	}
 	if v, ok := ctx.GetQuery("end"); ok {
-		q = q.Where("received_at <= ?", v)
+		q = q.Where("created_at <= ?", v)
 	}
 	if v, ok := ctx.GetQuery("status"); ok {
-		q = q.Where("status = ?", cast.ToBool(v))
+		ss := strings.Split(v, ",")
+		if len(ss) == 1 {
+			q = q.Where("status = ?", cast.ToBool(v))
+		}
 	}
 	for _, k := range []string{"sender", "content"} {
 		if v, ok := ctx.GetQuery(k); ok {
 			q = q.Where(fmt.Sprintf("JSON_EXTRACT(`message`,'$.%s') LIKE ?", k), fmt.Sprintf("%%%s%%", v))
+		}
+	}
+	if v, ok := ctx.GetQuery("sort"); ok {
+		if len(v) > 1 {
+			q = q.Order(fmt.Sprintf("%s %s", v[1:], lo.Ternary(v[:1] == "+", "ASC", "DESC")))
 		}
 	}
 	count := int64(0)

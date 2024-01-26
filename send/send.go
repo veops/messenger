@@ -230,7 +230,7 @@ func handleMessage(msg *message) (err error) {
 		if err != nil && !msg.Sync {
 			log.Println(err)
 		}
-		if msg.Err != nil && err != nil {
+		if msg.Err == nil {
 			msg.Err = err
 		}
 		AddHistory(msg)

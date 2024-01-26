@@ -31,16 +31,27 @@ func main() {
 
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
-	v1 := r.Group("/v1").Use(middleware.Auth(authConf), middleware.Error2Resp())
+	g1 := r.Group("/v1").Use(middleware.Auth(authConf), middleware.Error2Resp())
 	{
-		v1.POST("/message", send.PushMessage)
-		v1.POST("/uid/getbyphone", send.GetUIDByPhone)
-		v1.GET("/histories", send.QueryHistory)
+		g1.POST("/message", send.PushMessage)
+		g1.POST("/uid/getbyphone", send.GetUIDByPhone)
 
-		v1.POST("/senders", global.PushRemoteConf)
-		v1.PUT("/senders", global.PushRemoteConf)
-		v1.DELETE("/senders", global.PushRemoteConf)
+		g1.POST("/senders", global.PushRemoteConf)
+		g1.PUT("/senders", global.PushRemoteConf)
+		g1.DELETE("/senders", global.PushRemoteConf)
 	}
+	g2 := r.Group("/v1").Use(middleware.Error2Resp())
+	{
+		g2.GET("/histories", send.QueryHistory)
+	}
+
+	r.StaticFile("/web", "./web/build/index.html")
+	r.StaticFile("/manifest.json", "./web/build/manifest.json")
+	r.StaticFile("/logo192.png", "./web/build/logo192.png")
+	r.StaticFile("/favicon.ico", "./web/build//favicon.ico")
+	r.Static("/static", "./web/build/static")
+	// r.Static("/manifest.json", ".web/build/manifest.json")
+
 	docs.SwaggerInfo.Title = "Messenger api"
 	docs.SwaggerInfo.Version = ""
 	docs.SwaggerInfo.BasePath = "/"
