@@ -29,6 +29,9 @@ func (e *email) send(msg *message) (err error) {
 			}, func() *gomail.Dialer {
 				return gomail.NewDialer(e.conf["host"], cast.ToInt(e.conf["port"]), e.conf["account"], e.conf["password"])
 			})
+		if cast.ToInt(e.conf["port"]) == 994 {
+			e.d.SSL = true
+		}
 		if !cast.ToBool(e.conf["tls"]) {
 			e.d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 		}
