@@ -1,4 +1,4 @@
-FROM golang:1.20.4-alpine3.17
+FROM golang:alpine
 RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 RUN apk add tzdata
 RUN apk add build-base
