@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: |
+        docker login --username=${{ secrets.ALI_ACCOUNT }} --password=${{ secrets.ALI_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
+        docker build . --file Dockerfile --tag registry.cn-hangzhou.aliyuncs.com/veops/messenger:latest
+        docker push registry.cn-hangzhou.aliyuncs.com/veops/messenger:latest
