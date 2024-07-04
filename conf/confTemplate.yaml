@@ -3,8 +3,9 @@ app:
   port: 8888
 
 auths:
-  # - type: ip
-  #   pattern: 192.168.*.*
+  - type: ip
+    pattern: 
+      - 192.168.*.*,127.0.0.1
 
   # - type: token
   #   token: your token
