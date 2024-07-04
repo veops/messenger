@@ -6,7 +6,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"net/http"
-	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -44,8 +43,25 @@ var (
 )
 
 func authByIP(conf map[string]string, ctx *gin.Context) bool {
-	m, err := filepath.Match(conf["pattern"], ctx.ClientIP())
-	return m && err == nil
+	ip := ctx.ClientIP()
+	ps := strings.Split(conf["pattern"], ",")
+	for _, p := range ps {
+		ss1 := strings.Split(p, ".")
+		ss2 := strings.Split(ip, ".")
+		if len(ss1) != len(ss2) {
+			continue
+		}
+		b := true
+		for i := 0; i < len(ss1) && b; i++ {
+			if ss1[i] != "*" && ss1[i] != ss2[i] {
+				b = false
+			}
+		}
+		if b {
+			return true
+		}
+	}
+	return false
 }
 
 func authByToken(conf map[string]string, ctx *gin.Context) bool {

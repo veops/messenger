@@ -31,6 +31,7 @@ func main() {
 
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
+	r.SetTrustedProxies([]string{"0.0.0.0/0", "::/0"})
 	g1 := r.Group("/v1").Use(middleware.Auth(authConf), middleware.Error2Resp())
 	{
 		g1.POST("/message", send.PushMessage)
