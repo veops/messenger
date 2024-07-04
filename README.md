@@ -20,10 +20,14 @@ cp conf/confTemplate.yaml conf/conf.yaml # edit your config
 
 ### docker
 ```bash
+# 源码构建
 cd messenger
 cp conf/confTemplate.yaml conf/conf.yaml # edit your config
 docker build --tag messenger .
-docker run -d --name messenger -p 8888:8888 -v $(pwd)/conf:/messenger/conf --restart=always messenger 
+docker run -d --name messenger -p 8888:8888 -v $(pwd)/conf:/messenger/conf --restart=always messenger
+
+# 镜像
+docker pull registry.cn-hangzhou.aliyuncs.com/veops/messenger:latest
 ```
 
 ## API
