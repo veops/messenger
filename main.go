@@ -36,6 +36,7 @@ func main() {
 	{
 		g1.POST("/message", send.PushMessage)
 		g1.POST("/uid/getbyphone", send.GetUIDByPhone)
+		g1.POST("/uid/getbyemail", send.GetUIDByEmail)
 
 		g1.POST("/senders", global.PushRemoteConf)
 		g1.PUT("/senders", global.PushRemoteConf)

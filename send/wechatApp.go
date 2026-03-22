@@ -13,9 +13,10 @@ import (
 )
 
 const (
-	wechatTokenURL  = "https://qyapi.weixin.qq.com/cgi-bin/gettoken"
-	wechatSendURL   = "https://qyapi.weixin.qq.com/cgi-bin/message/send"
-	wechatGetUIDURL = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserid"
+	wechatTokenURL          = "https://qyapi.weixin.qq.com/cgi-bin/gettoken"
+	wechatSendURL           = "https://qyapi.weixin.qq.com/cgi-bin/message/send"
+	wechatGetUIDURL         = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserid"
+	wechatGetUIDByEmailURL  = "https://qyapi.weixin.qq.com/cgi-bin/user/get_userid_by_email"
 )
 
 func init() {
@@ -90,6 +91,37 @@ func (w *wechatApp) getUIDByPhone(phone string) (uid string, err error) {
 		Post(wechatGetUIDURL)
 
 	if err = handleErr("get uid by phone with wechat app failed", err, resp, func(dt map[string]any) bool { return dt["errcode"] == 0.0 }); err != nil {
+		return
+	}
+
+	uid = r.UserID
+
+	return
+}
+
+// getUIDByEmail
+//
+//	https://developer.work.weixin.qq.com/document/path/95895
+func (w *wechatApp) getUIDByEmail(email string) (uid string, err error) {
+	if err = w.checkToken(); err != nil {
+		return
+	}
+
+	type res struct {
+		UserID string `json:"userid"`
+	}
+	r := &res{}
+
+	resp, err := rc.R().
+		SetQueryParam("access_token", w.token).
+		SetBody(map[string]any{
+			"email":      email,
+			"email_type": 2,
+		}).
+		SetResult(r).
+		Post(wechatGetUIDByEmailURL)
+
+	if err = handleErr("get uid by email with wechat app failed", err, resp, func(dt map[string]any) bool { return dt["errcode"] == 0.0 }); err != nil {
 		return
 	}
 

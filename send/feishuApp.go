@@ -104,6 +104,43 @@ func (f *feishuApp) getUIDByPhone(phone string) (uid string, err error) {
 	return
 }
 
+// getUIDByEmail
+//
+//	https://open.feishu.cn/open-apis/contact/v3/users/batch_get_id
+func (f *feishuApp) getUIDByEmail(email string) (uid string, err error) {
+	if err = f.checkToken(); err != nil {
+		return
+	}
+
+	type res struct {
+		Data struct {
+			UserList []struct {
+				UserID string `json:"user_id"`
+			} `json:"user_list"`
+		} `json:"data"`
+	}
+	r := &res{}
+
+	resp, err := rc.R().
+		SetAuthToken(f.token).
+		SetQueryParam("user_id_type", "user_id").
+		SetBody(map[string]any{
+			"emails": []string{email},
+		}).
+		SetResult(r).
+		Post(feishuGetUIDURL)
+
+	if err = handleErr("get uid by email with feishu app failed", err, resp, func(dt map[string]any) bool { return dt["code"] == 0.0 }); err != nil {
+		return
+	}
+
+	if len(r.Data.UserList) > 0 {
+		uid = r.Data.UserList[0].UserID
+	}
+
+	return
+}
+
 func (f *feishuApp) checkToken() (err error) {
 	now := time.Now()
 	if !(f.token == "" || f.tokenExpireAt.Before(now)) {

@@ -40,6 +40,10 @@ type senderManager interface {
 	getUIDByPhone(string) (string, error)
 }
 
+type senderEmailManager interface {
+	getUIDByEmail(string) (string, error)
+}
+
 type message struct {
 	Sender     string         `json:"sender" validate:"required" example:"myWechatBot"`
 	MsgType    string         `json:"msgtype" validate:"required" example:"text"`
@@ -63,6 +67,11 @@ type message struct {
 type getUIDByPhoneReq struct {
 	Sender string `json:"sender" validate:"required" example:"myWechatBot"`
 	Phone  string `json:"phone" validate:"required" example:"133123456789"`
+}
+
+type getUIDByEmailReq struct {
+	Sender string `json:"sender" validate:"required" example:"myWechatBot"`
+	Email  string `json:"email" validate:"required" example:"user@example.com"`
 }
 
 func init() {
@@ -175,6 +184,47 @@ func GetUIDByPhone(ctx *gin.Context) {
 		return
 	}
 	uid, err := sm.getUIDByPhone(r.Phone)
+	if err != nil {
+		return
+	}
+	ctx.JSON(http.StatusOK, map[string]string{"uid": uid})
+}
+
+// GetUIDByEmail
+//
+//	@Tags			send
+//	@Description	get user's uid by email address
+//	@Accept			json
+//	@Produce		json
+//	@Param			body	body		getUIDByEmailReq	true	" "
+//	@Success		200		{object}	map[string]string	"a map with email as key and uid as value"
+//	@Router			/v1/uid/getbyemail [POST]
+func GetUIDByEmail(ctx *gin.Context) {
+	var err error
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("%v", r)
+		}
+		if err != nil {
+			ctx.AbortWithError(http.StatusBadRequest, err)
+		}
+	}()
+	r := &getUIDByEmailReq{}
+	if err := ctx.ShouldBindBodyWith(&r, binding.JSON); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	s, ok := name2sender[r.Sender]
+	if !ok || s == nil {
+		err = fmt.Errorf("cannot find sender with name %s", r.Sender)
+		return
+	}
+	sm, ok := s.(senderEmailManager)
+	if !ok || sm == nil {
+		err = fmt.Errorf("sender with name %s and type %s does not support to query uid by email", r.Sender, s.getConf()["type"])
+		return
+	}
+	uid, err := sm.getUIDByEmail(r.Email)
 	if err != nil {
 		return
 	}
