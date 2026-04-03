@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cast"
 	"golang.org/x/sync/errgroup"
 	"gopkg.in/gomail.v2"
-	"gorm.io/driver/sqlite"
+	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )
 
